@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import TaskCard from '../../components/TaskCard';
 import CreateTaskModal from '../../components/CreateTaskModal';
 import AddMemberModal from '../../components/AddMemberModal';
+import { useAuth } from '../../context/AuthContext';
 
 function ProjectDetail() {
     const { id } = useParams();
@@ -15,6 +16,7 @@ function ProjectDetail() {
     const [showTaskModal, setShowTaskModal] = useState(false);
     const [showMemberModal, setShowMemberModal] = useState(false);
     const [project, setProject] = useState(null);
+    const { user } = useAuth();
 
     useEffect(() => {
         fetchProject();
@@ -51,9 +53,11 @@ function ProjectDetail() {
                     ← Back to Projects
                 </button>
                 <div style={styles.headerActions}>
-                    <button style={styles.memberBtn} onClick={() => setShowMemberModal(true)}>
-                        👥 Members ({project?.memberIds?.length || 0})
-                    </button>
+                     {user?.role === 'ADMIN' && (
+                        <button style={styles.memberBtn} onClick={() => setShowMemberModal(true)}>
+                            👥 Members ({project?.memberIds?.length || 0})
+                        </button>
+                    )}
                     <button style={styles.newTaskBtn} onClick={() => setShowTaskModal(true)}>
                         + New Task
                     </button>
