@@ -1,4 +1,4 @@
-# DevCollab — Frontend
+# DevCollab - Frontend
 
 React single-page application for the DevCollab team project management platform.
 
