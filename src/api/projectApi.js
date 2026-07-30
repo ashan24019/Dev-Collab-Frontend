@@ -1,7 +1,9 @@
 import axiosInstance from './axiosInstance';
 
-export const getAllProjects = async () => {
-    const response = await axiosInstance.get('/api/projects');
+export const getAllProjects = async (page = 0, size = 10) => {
+    const response = await axiosInstance.get('/api/projects', {
+        params: {page, size}
+    });
     return response.data;
 }
 
