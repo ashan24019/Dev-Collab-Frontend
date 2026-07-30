@@ -9,7 +9,7 @@ import Pagination from '../../components/Pagination';
 function Dashboard() {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
-    const { projects, loading, error, refetch, page, totalPages, totalElements, goToPage } = useProjects();
+    const { projects, loading, error, resetAndRefetch, page, totalPages, totalElements, goToPage } = useProjects();
     const [showModal, setShowModal] = useState(false);
 
     const handleLogout = () => {
@@ -96,7 +96,7 @@ function Dashboard() {
             {showModal && (
                 <CreateProjectModal
                     onClose={() => setShowModal(false)}
-                    onCreated={refetch}
+                    onCreated={resetAndRefetch}
                 />
             )}
         </div>

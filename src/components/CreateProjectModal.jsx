@@ -22,8 +22,8 @@ function CreateProjectModal({ onClose, onCreated }) {
                 ...formData,
                 ownerId: user.id,
             });
-            onCreated();   // tell parent to refetch projects
-            onClose();     // close modal
+            onCreated(); 
+            onClose();
         } catch (err) {
             setError(err.response?.data?.message || 'Failed to create project');
         } finally {

@@ -33,6 +33,10 @@ export const useProjects = (initialSize = 10) => {
     }
   }
 
+  const resetAndRefetch = () => {
+    setPage(0)
+  }
+
   return {
     projects,
     loading,
