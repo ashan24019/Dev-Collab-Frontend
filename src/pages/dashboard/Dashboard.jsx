@@ -4,11 +4,12 @@ import { useAuth } from '../../context/AuthContext';
 import { useProjects } from '../../hooks/useProjects';
 import ProjectCard from '../../components/ProjectCard';
 import CreateProjectModal from '../../components/CreateProjectModal';
+import Pagination from '../../components/Pagination';
 
 function Dashboard() {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
-    const { projects, loading, error, refetch } = useProjects();
+    const { projects, loading, error, refetch, page, totalPages, totalElements, goToPage } = useProjects();
     const [showModal, setShowModal] = useState(false);
 
     const handleLogout = () => {
@@ -41,7 +42,7 @@ function Dashboard() {
                     <div>
                         <h2 style={styles.pageTitle}>Projects</h2>
                         <p style={styles.pageSubtitle}>
-                            {projects.length} project{projects.length !== 1 ? 's' : ''}
+                            {totalElements} project{totalElements !== 1 ? 's' : ''}
                         </p>
                     </div>
                     <button
@@ -70,15 +71,24 @@ function Dashboard() {
 
                 {/* Project grid */}
                 {!loading && projects.length > 0 && (
-                    <div style={styles.grid}>
-                        {projects.map((project) => (
-                            <ProjectCard
-                                key={project.id}
-                                project={project}
-                                onClick={handleProjectClick}
+                    <>
+                        <div style={styles.grid}>
+                            {projects.map((project) => (
+                                <ProjectCard
+                                    key={project.id}
+                                    project={project}
+                                    onClick={handleProjectClick}
+                                />
+                            ))}
+                        </div>
+                        {totalPages > 1 && (
+                            <Pagination
+                                page={page}
+                                totalPages={totalPages}
+                                onPageChange={goToPage}
                             />
-                        ))}
-                    </div>
+                        )}
+                    </>
                 )}
             </div>
 
