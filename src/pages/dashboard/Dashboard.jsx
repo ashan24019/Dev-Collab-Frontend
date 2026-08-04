@@ -9,7 +9,19 @@ import Pagination from '../../components/Pagination';
 function Dashboard() {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
-    const { projects, loading, error, resetAndRefetch, page, totalPages, totalElements, goToPage } = useProjects();
+    const { 
+        projects, 
+        loading, 
+        error, 
+        resetAndRefetch, 
+        page, 
+        totalPages, 
+        totalElements, 
+        goToPage, 
+        search,
+        searchName 
+    } = useProjects();
+
     const [showModal, setShowModal] = useState(false);
 
     const handleLogout = () => {
@@ -45,6 +57,15 @@ function Dashboard() {
                             {totalElements} project{totalElements !== 1 ? 's' : ''}
                         </p>
                     </div>
+
+                    <input
+                        style={styles.searchInput}
+                        type="text"
+                        placeholder="Search projects..."
+                        value={searchName}
+                        onChange={(e) => search(e.target.value)}
+                    />
+
                     <button
                         style={styles.newProjectBtn}
                         onClick={() => setShowModal(true)}
@@ -155,6 +176,14 @@ const styles = {
     stateText: { color: '#6b7280', textAlign: 'center', padding: '40px' },
     errorText: { color: '#dc2626', textAlign: 'center', padding: '40px' },
     emptyState: { textAlign: 'center', padding: '60px', color: '#6b7280' },
+    searchInput: {
+        padding: '10px 16px',
+        border: '1px solid #ddd',
+        borderRadius: '6px',
+        fontSize: '14px',
+        width: '250px',
+        outline: 'none',
+    },
 };
 
 export default Dashboard;
