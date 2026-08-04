@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { getAllProjects } from "../api/projectApi";
+import { useDebounce } from "./useDebounce";
 
 export const useProjects = (initialSize = 10) => {
   const [projects, setProjects] = useState([]);
@@ -8,15 +9,18 @@ export const useProjects = (initialSize = 10) => {
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
+  const [searchName, setSearchName] = useState('')
+
+  const deboucedName = useDebounce(searchName, 400)
 
   useEffect(() => {
     fetchProjects();
-  }, [page]);
+  }, [page, deboucedName]);
 
   const fetchProjects = async () => {
     try {
       setLoading(true);
-      const data = await getAllProjects(page, initialSize);
+      const data = await getAllProjects(page, initialSize, deboucedName);
       setProjects(data.content);
       setTotalPages(data.totalPages)
       setTotalElements(data.totalElements)
@@ -37,6 +41,11 @@ export const useProjects = (initialSize = 10) => {
     setPage(0)
   }
 
+  const search = (name) => {
+    setSearchName(name);
+    setPage(0)
+  }
+
   return {
     projects,
     loading,
@@ -45,6 +54,8 @@ export const useProjects = (initialSize = 10) => {
     totalPages,
     totalElements,
     goToPage,
-    refetch: fetchProjects,
+    search,
+    searchName,
+    resetAndRefetch
   };
 };
