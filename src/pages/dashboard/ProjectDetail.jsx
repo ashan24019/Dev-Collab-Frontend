@@ -12,7 +12,19 @@ import { useAuth } from '../../context/AuthContext';
 function ProjectDetail() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { tasks, loading, error, refetch } = useTasks(id);
+    const { 
+        tasks, 
+        loading, 
+        error, 
+        refetch,
+        status,
+        priority,
+        setStatusFilter,
+        setPriorityFilter,
+        page, 
+        totalPages, 
+        goToPage
+    } = useTasks(id);
     const [showTaskModal, setShowTaskModal] = useState(false);
     const [showMemberModal, setShowMemberModal] = useState(false);
     const [project, setProject] = useState(null);
@@ -73,6 +85,30 @@ function ProjectDetail() {
 
             {loading && <p style={styles.stateText}>Loading tasks...</p>}
             {error && <p style={styles.errorText}>{error}</p>}
+
+            <div style={styles.filters}>
+                <select
+                    style={styles.filterSelect}
+                    value={status}
+                    onChange={(e) => setStatusFilter(e.target.value || null)}
+                >
+                    <option value="">All Statuses</option>
+                    <option value="TODO">To Do</option>
+                    <option value="IN_PROGRESS">In Progress</option>
+                    <option value="DONE">Done</option>
+                </select>
+
+                <select
+                    style={styles.filterSelect}
+                    value={priority}
+                    onChange={(e) => setPriorityFilter(e.target.value || null)}
+                >
+                    <option value="">All Priorities</option>
+                    <option value="LOW">Low</option>
+                    <option value="MEDIUM">Medium</option>
+                    <option value="HIGH">High</option>
+                </select>
+            </div>
 
             {!loading && !error && (
                 <div style={styles.board}>
@@ -148,6 +184,18 @@ const styles = {
     emptyColumn: { color: '#9ca3af', fontSize: '13px', textAlign: 'center', padding: '20px' },
     stateText: { color: '#6b7280', textAlign: 'center', padding: '40px' },
     errorText: { color: '#dc2626', textAlign: 'center', padding: '40px' },
+    filters: {
+        display: 'flex',
+        gap: '12px',
+        marginBottom: '20px',
+    },
+    filterSelect: {
+        padding: '8px 12px',
+        border: '1px solid #ddd',
+        borderRadius: '6px',
+        fontSize: '14px',
+        cursor: 'pointer',
+    },
 };
 
 export default ProjectDetail;
