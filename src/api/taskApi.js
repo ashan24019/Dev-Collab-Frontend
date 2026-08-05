@@ -19,3 +19,13 @@ export const deleteTask = async (id) => {
     const response = await axiosInstance.delete(`/api/tasks/${id}`);
     return response.data;
 };
+
+export const searchTask = async (projectId, status, priority, page=0, size=10) => {
+    const params = {page, size}
+
+    if(status) params.status = status;
+    if(priority) params.priority = priority;
+
+    const response = await axiosInstance.get(`/api/tasks/project/${projectId}/search`, {params})
+    return response.data
+}
