@@ -40,7 +40,8 @@ export function useTasks(projectId) {
     }
 
     return { 
-        tasks, 
+        tasks,
+        setTasks,
         loading, 
         error, 
         refetch: fetchTasks,

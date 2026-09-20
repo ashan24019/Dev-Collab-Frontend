@@ -8,12 +8,14 @@ import TaskCard from '../../components/TaskCard';
 import CreateTaskModal from '../../components/CreateTaskModal';
 import AddMemberModal from '../../components/AddMemberModal';
 import { useAuth } from '../../context/AuthContext';
+import { useProjectSocket } from '../../hooks/useProjectSocket';
 
 function ProjectDetail() {
     const { id } = useParams();
     const navigate = useNavigate();
     const { 
         tasks, 
+        setTasks,
         loading, 
         error, 
         refetch,
@@ -57,6 +59,23 @@ function ProjectDetail() {
         IN_PROGRESS: tasks.filter((t) => t.status === 'IN_PROGRESS'),
         DONE: tasks.filter((t) => t.status === 'DONE'),
     };
+
+    const handleTaskUpdate = (data) => {
+        if (data.action === 'DELETED') {
+            setTasks((prev) => prev.filter((t) => t.id !== data.taskId));
+            return;
+        }
+
+        setTasks((prev) => {
+            const exists = prev.some((t) => t.id === data.id);
+            if (exists) {
+                return prev.map((t) => (t.id === data.id ? data : t));
+            }
+            return [...prev, data];
+        });
+    };
+
+    useProjectSocket(id, handleTaskUpdate);
 
     return (
         <div style={styles.container}>
