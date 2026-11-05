@@ -75,7 +75,10 @@ function ProjectDetail() {
         });
     };
 
-    useProjectSocket(id, handleTaskUpdate);
+    const isLive = useProjectSocket(id, handleTaskUpdate);
+    useEffect(() => {
+        if (isLive) refetch();
+    }, [isLive]);
 
     return (
         <div style={styles.container}>
@@ -98,6 +101,9 @@ function ProjectDetail() {
             {project && (
                 <div style={styles.projectInfo}>
                     <h2 style={styles.projectTitle}>{project.name}</h2>
+                    <span style={isLive ? styles.liveIndicator : styles.offlineIndicator}>
+                        {isLive ? '● Live' : '○ Reconnecting...'}
+                    </span>
                     <p style={styles.projectDesc}>{project.description}</p>
                 </div>
             )}
@@ -192,6 +198,26 @@ const styles = {
     },
     projectInfo: { marginBottom: '24px' },
     projectTitle: { margin: '0 0 4px', fontSize: '22px' },
+    liveIndicator: {
+    display: 'inline-block',
+    marginBottom: '8px',
+    padding: '2px 10px',
+    borderRadius: '12px',
+    fontSize: '12px',
+    fontWeight: '600',
+    backgroundColor: '#dcfce7',
+    color: '#16a34a',
+},
+offlineIndicator: {
+    display: 'inline-block',
+    marginBottom: '8px',
+    padding: '2px 10px',
+    borderRadius: '12px',
+    fontSize: '12px',
+    fontWeight: '600',
+    backgroundColor: '#fee2e2',
+    color: '#dc2626',
+},
     projectDesc: { margin: 0, color: '#6b7280' },
     board: {
         display: 'grid',
