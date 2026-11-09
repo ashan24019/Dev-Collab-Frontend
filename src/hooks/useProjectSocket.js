@@ -11,6 +11,12 @@ export function useProjectSocket(projectId, onTaskUpdate) {
 
         const client = new Client({
             webSocketFactory: () => new SockJS(import.meta.env.VITE_API_URL + '/ws'),
+            connectHeaders: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+            debug: (str) => {
+                console.log(str);
+            },
             reconnectDelay: 5000,
             onConnect: () => {
                 console.log('Connected to WebSocket');
